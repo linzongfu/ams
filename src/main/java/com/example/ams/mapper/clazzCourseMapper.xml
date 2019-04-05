@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ams.mapper.clazzCourseMapper">
+  <resultMap id="BaseResultMap" type="com.example.ams.model.clazzCourse">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="classid" jdbcType="INTEGER" property="classid" />
+    <result column="courseid" jdbcType="INTEGER" property="courseid" />
+    <result column="semesterid" jdbcType="INTEGER" property="semesterid" />
+    <result column="teacherId" jdbcType="VARCHAR" property="teacherid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.ams.model.clazzCourse">
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, classid, courseid, semesterid, teacherId
+  </sql>
+  <sql id="Blob_Column_List">
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from class_course
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from class_course
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.ams.model.clazzCourse">
+    insert into class_course (id, classid, courseid, 
+      semesterid, teacherId, remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{classid,jdbcType=INTEGER}, #{courseid,jdbcType=INTEGER}, 
+      #{semesterid,jdbcType=INTEGER}, #{teacherid,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.ams.model.clazzCourse">
+    insert into class_course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="classid != null">
+        classid,
+      </if>
+      <if test="courseid != null">
+        courseid,
+      </if>
+      <if test="semesterid != null">
+        semesterid,
+      </if>
+      <if test="teacherid != null">
+        teacherId,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="classid != null">
+        #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="courseid != null">
+        #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="semesterid != null">
+        #{semesterid,jdbcType=INTEGER},
+      </if>
+      <if test="teacherid != null">
+        #{teacherid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.ams.model.clazzCourse">
+    update class_course
+    <set>
+      <if test="classid != null">
+        classid = #{classid,jdbcType=INTEGER},
+      </if>
+      <if test="courseid != null">
+        courseid = #{courseid,jdbcType=INTEGER},
+      </if>
+      <if test="semesterid != null">
+        semesterid = #{semesterid,jdbcType=INTEGER},
+      </if>
+      <if test="teacherid != null">
+        teacherId = #{teacherid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.ams.model.clazzCourse">
+    update class_course
+    set classid = #{classid,jdbcType=INTEGER},
+      courseid = #{courseid,jdbcType=INTEGER},
+      semesterid = #{semesterid,jdbcType=INTEGER},
+      teacherId = #{teacherid,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.ams.model.clazzCourse">
+    update class_course
+    set classid = #{classid,jdbcType=INTEGER},
+      courseid = #{courseid,jdbcType=INTEGER},
+      semesterid = #{semesterid,jdbcType=INTEGER},
+      teacherId = #{teacherid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getCCByoption" resultType="com.example.ams.model.clazzCourse">
+        select cc.*
+        from class_course cc
+        where cc.classid=#{arg0} and cc.courseid=#{arg1}  and cc.semesterid=#{arg2}
+  </select>
+</mapper>

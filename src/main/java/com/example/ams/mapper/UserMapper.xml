@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ams.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.example.ams.model.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="type" jdbcType="BIT" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, number, password, type
+  </sql>
+
+  <select id="findByNumber" parameterType="java.lang.String" resultType="com.example.ams.model.User">
+      SELECT * FROM user
+      where
+      number=#{number}
+    </select>
+
+  <select id="selectAllUser" parameterType="com.example.ams.model.User" resultType="com.example.ams.model.User">
+      SELECT * FROM user where status=1
+        <if test="name != null and name.length()>0">
+          and name like concat('%',#{name},'%')
+        </if>
+        <if test="type != null">
+          and type=#{type}
+        </if>
+       <if test="class_id != null">
+          and class_id=#{class_id}
+       </if>
+  </select>
+
+  <select id="getUserByClazz" parameterType="java.lang.Integer" resultType="com.example.ams.model.User">
+    SELECT * FROM user where status=1 and class_id=#{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.ams.model.User">
+    insert into user (id, number, password, 
+      type)
+    values (#{id,jdbcType=INTEGER}, #{number,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{type,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.ams.model.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.ams.model.User">
+    update user
+    <set>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="nameupdateByPrimaryKey != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.ams.model.User">
+    update user
+    set number = #{number,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      type = #{type,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
